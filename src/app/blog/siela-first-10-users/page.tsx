@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: 'How I got Siela’s first 10 users in two weeks',
     description: 'A field note on earning early users by staying close to the problem.',
     url: '/blog/siela-first-10-users',
-    images: [{ url: '/portfolio/blog/siela-first-10-users-cover.png', width: 1792, height: 1008, alt: 'A founder reviewing early user-feedback notes at a desk' }]
+    images: [{ url: '/portfolio/blog/siela-first-10-users-cover-v2.png', width: 1792, height: 1008, alt: 'A founder reviewing early user-feedback notes at a desk' }]
   }
 };
 
@@ -26,7 +26,7 @@ const articleSchema = {
   description: 'A founder field note on earning Siela’s first 10 users through conversations, an early product, and a tight feedback loop.',
   datePublished: publishedAt,
   dateModified: publishedAt,
-  image: 'https://danish.sh/portfolio/blog/siela-first-10-users-cover.png',
+  image: 'https://danish.sh/portfolio/blog/siela-first-10-users-cover-v2.png',
   mainEntityOfPage: 'https://danish.sh/blog/siela-first-10-users',
   author: { '@type': 'Person', name: 'Danish Khan', url: 'https://danish.sh' },
   publisher: { '@type': 'Person', name: 'Danish Khan', url: 'https://danish.sh' }
@@ -41,7 +41,7 @@ export default function SielaFirstTenUsers() {
       <h1>How I got Siela&apos;s first 10 users in two weeks</h1>
       <p className="article-lede">The first users did not come from a big launch. They came from getting close to a real problem, showing the work early, and treating every conversation as part of the product.</p>
       <div className="article-byline"><Image src="/portfolio/danish-blog-pixel.png" alt="Pixelated black-and-white portrait of Danish Khan" width={40} height={40}/><p>By Danish Khan<br/><time dateTime={publishedAt}>August 29, 2026 · 4 min read</time></p></div>
-      <figure className="article-cover"><Image src="/portfolio/blog/siela-first-10-users-cover.png" alt="A founder reviewing early user-feedback notes at a desk" width={1792} height={1008} priority/><figcaption>A visual field note on making the first conversations count.</figcaption></figure>
+      <figure className="article-cover"><Image src="/portfolio/blog/siela-first-10-users-cover-v2.png" alt="A founder reviewing early user-feedback notes at a desk" width={1792} height={1008} priority/><figcaption>A visual field note on making the first conversations count.</figcaption></figure>
 
       <div className="article-body">
         <p>When I started building Siela, I was not trying to make another dashboard. I wanted an AI-native workspace that could take care of the repetitive work that gets in the way: CRM updates, follow-ups, tasks, meetings, reminders and calendar actions. It only becomes useful when it connects to a day someone has actually had — a meeting without notes, a lost lead, or a follow-up that disappeared into a to-do list.</p>
