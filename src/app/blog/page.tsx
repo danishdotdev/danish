@@ -4,7 +4,6 @@ import { ArrowUpRight, Mail, PenLine } from 'lucide-react';
 import BlogDock from '../../components/BlogDock';
 
 const drafts = [
-  { label: 'Product & growth', title: 'How I got Siela’s first 10 users in two weeks', read: '6 min read' },
   { label: 'Creative to product', title: 'From video editor to product builder: the path I didn’t plan', read: '5 min read' },
   { label: 'Immigration technology', title: 'Designing calmer experiences for stressful workflows', read: '7 min read' },
 ];
@@ -32,8 +31,7 @@ export default function BlogIndex() {
       </Link>
     </section>
 
-    <section className="blog-section" aria-labelledby="drafts-title">
-      <div className="blog-section-heading"><h2 id="drafts-title">More notes, soon</h2><span>In progress</span></div>
+    <section className="blog-section blog-post-list" aria-label="More articles">
       <div className="blog-drafts">{drafts.map((draft) => <article key={draft.title}><div><span>{draft.label}</span><span>{draft.read}</span></div><h3>{draft.title}</h3><small>{draft.title === drafts[0].title ? 'Published' : 'Draft in progress'} <ArrowUpRight size={13}/></small></article>)}</div>
     </section>
 
