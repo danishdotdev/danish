@@ -1,13 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, Mail, PenLine } from 'lucide-react';
 import BlogDock from '../../components/BlogDock';
-
-const lanes = [
-  { number: '01', title: 'AI products', copy: 'Shipping useful agents, workspaces and early product decisions.' },
-  { number: '02', title: 'Growth systems', copy: 'Finding users, positioning products and building repeatable momentum.' },
-  { number: '03', title: 'Creative to product', copy: 'What editing, shooting and storytelling taught me about attention.' },
-  { number: '04', title: 'Founder notes', copy: 'The honest, unfinished lessons from building in public.' },
-];
 
 const drafts = [
   { label: 'Product & growth', title: 'How I got Siela’s first 10 users in two weeks', read: '6 min read' },
@@ -29,22 +23,17 @@ export default function BlogIndex() {
     </section>
 
     <section className="blog-featured" aria-labelledby="featured-title">
-      <div className="blog-featured-visual"><span>01</span><i>AI-native<br/>workspace</i></div>
+      <div className="blog-featured-visual"><Image src="/portfolio/blog/siela-first-10-users-cover-v3.png" alt="A founder reviewing feedback at a desk" fill priority sizes="(max-width: 680px) 100vw, 640px"/><div className="featured-visual-caption"><span>01</span><i>Siela / field note</i></div></div>
       <Link href="/blog/siela-first-10-users" className="blog-featured-copy">
-        <span className="blog-kicker">Start here</span>
+        <span className="blog-kicker">Featured note</span>
         <h2 id="featured-title">How I got Siela&apos;s first 10 users in two weeks</h2>
-        <p>The early launch decisions, direct conversations and small experiments behind Siela&apos;s first group of users.</p>
-        <div><span>Product & growth</span><span>6 min read</span><b>Read article <ArrowUpRight size={12}/></b></div>
+        <p>Direct conversations, a rough first version, and the small decisions that helped Siela find its first users.</p>
+        <div><span>Product & growth</span><span>4 min read</span><b>Read note <ArrowUpRight size={12}/></b></div>
       </Link>
     </section>
 
-    <section className="blog-section" aria-labelledby="map-title">
-      <div className="blog-section-heading"><h2 id="map-title">What I write about</h2><span>04 lanes</span></div>
-      <div className="blog-lanes">{lanes.map((lane) => <article key={lane.number}><span>{lane.number}</span><h3>{lane.title}</h3><p>{lane.copy}</p></article>)}</div>
-    </section>
-
     <section className="blog-section" aria-labelledby="drafts-title">
-      <div className="blog-section-heading"><h2 id="drafts-title">On the desk</h2><span>New writing in progress</span></div>
+      <div className="blog-section-heading"><h2 id="drafts-title">More notes, soon</h2><span>In progress</span></div>
       <div className="blog-drafts">{drafts.map((draft) => <article key={draft.title}><div><span>{draft.label}</span><span>{draft.read}</span></div><h3>{draft.title}</h3><small>{draft.title === drafts[0].title ? 'Published' : 'Draft in progress'} <ArrowUpRight size={13}/></small></article>)}</div>
     </section>
 
