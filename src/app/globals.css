@@ -15,3 +15,15 @@ html.lenis,html.lenis body{height:auto}.lenis:not(.lenis-autoToggle).lenis-stopp
 body{font-family:var(--font-sans),Arial,sans-serif;font-size:16px;font-weight:400;line-height:1.5;letter-spacing:-.012em;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 .profile-title h1{font-weight:650;letter-spacing:-.055em}.content-section h2{font-weight:640;letter-spacing:-.028em}.company-copy strong,.achievement-card strong,.education-card strong{font-weight:620;letter-spacing:-.022em}.company-copy small,.identity-line,.experience-card time{font-weight:450}.tldr{max-width:58ch;letter-spacing:-.016em}.project-description,.achievement-card p,.early-work p{letter-spacing:-.01em}
 .dock button{appearance:none;-webkit-appearance:none;width:32px;height:32px;margin:0;padding:0;border:0;border-radius:50%;background:transparent;color:#f1f1f1;display:grid;place-items:center;cursor:pointer;line-height:1;transition:background-color .18s ease,color .18s ease}.dock button:hover{background:rgba(255,255,255,.13)}.dock button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}@media(max-width:680px){.dock button{width:29px;height:29px}}
+/* Light mode is a complete palette, not just a light page behind dark cards. */
+[data-theme=light] body{background-image:linear-gradient(rgba(16,20,18,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(16,20,18,.055) 1px,transparent 1px)}
+[data-theme=light] .project-card,[data-theme=light] .github-console,[data-theme=light] .early-work{background:var(--card)}
+[data-theme=light] .creative-visual{background:radial-gradient(circle at 22% 18%,#e9f6ee,#e1e6e2 58%,#d0d7d2);color:var(--text)}
+[data-theme=light] .views strong{color:var(--text)}[data-theme=light] .views span,[data-theme=light] .achievement-card p,[data-theme=light] .early-work p{color:var(--muted)}
+[data-theme=light] .project-description,[data-theme=light] .early-work,[data-theme=light] .github-console{border-color:var(--line)}
+[data-theme=light] .experience-details ul{color:#424742}[data-theme=light] .chips span{border-color:#bfc4bf}
+[data-theme=light] .achievement-card{background:linear-gradient(145deg,#fff,#f0f2ef);border-color:var(--line)}
+[data-theme=light] .contact-card{background:#f0f2ef}[data-theme=light] .contact-card a{box-shadow:inset 0 0 0 1px rgba(0,0,0,.04)}
+[data-theme=light] .console-bar{border-color:var(--line);color:var(--muted)}
+[data-theme=light] .dock{background:rgba(255,255,255,.92);border-color:var(--line);box-shadow:0 16px 35px rgba(25,30,26,.14)}
+[data-theme=light] .dock a,[data-theme=light] .dock button{color:var(--text)}[data-theme=light] .dock span{background:var(--line)}[data-theme=light] .dock button:hover{background:rgba(17,24,20,.08)}
