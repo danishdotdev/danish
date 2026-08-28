@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { ImagePlus, LogOut, PenLine, ShieldCheck } from 'lucide-react';
 import { isSupabaseConfigured } from '../../lib/blog';
 import { createServerSupabaseClient, isStudioAdmin } from '../../lib/supabase/server';
@@ -8,7 +9,7 @@ type StudioPageProps = { searchParams: Promise<{ error?: string; sent?: string; 
 
 export default async function StudioPage({ searchParams }: StudioPageProps) {
   const params = await searchParams;
-  if (!isSupabaseConfigured) return <main className="studio-shell"><Link href="/" className="studio-back">← Danish Khan</Link><section className="studio-setup"><ShieldCheck size={26}/><span className="blog-kicker">Private CMS setup</span><h1>Your Studio is ready to connect.</h1><p>Add the Supabase URL and publishable key to Vercel, run the provided database script, then return here to write and publish safely.</p><code>NEXT_PUBLIC_SUPABASE_URL<br/>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY<br/>CMS_ADMIN_EMAIL=dk557876@gmail.com</code></section></main>;
+  if (!isSupabaseConfigured) notFound();
   const supabase = await createServerSupabaseClient();
   const { data: { user } } = await supabase!.auth.getUser();
   if (!user || !isStudioAdmin(user.email)) return <main className="studio-shell"><Link href="/" className="studio-back">← Danish Khan</Link><section className="studio-login"><ShieldCheck size={24}/><span className="blog-kicker">Private Studio</span><h1>Write without touching code.</h1><p>Sign in with your approved email to create drafts and publish posts.</p>{params.error === 'denied' && <p className="studio-error" role="alert">This email is not approved for the Studio.</p>}{params.sent && <p className="studio-success" role="status">Check your inbox for the secure sign-in link.</p>}<form action={requestMagicLink}><label htmlFor="studio-email">Your email</label><input id="studio-email" name="email" type="email" autoComplete="email" required placeholder="dk557876@gmail.com"/><button type="submit">Send secure sign-in link</button></form></section></main>;
