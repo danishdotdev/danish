@@ -7,7 +7,7 @@ declare global {
   interface Window { gtag?: (...args: unknown[]) => void; }
 }
 
-const measurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const measurementId = 'G-QDYRRJT1E0';
 
 export default function Analytics() {
   useEffect(() => {
@@ -27,7 +27,6 @@ export default function Analytics() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  if (!measurementId) return null;
   return <>
     <Script src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`} strategy="afterInteractive" />
     <Script id="ga4" strategy="afterInteractive">{`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','${measurementId}');`}</Script>
