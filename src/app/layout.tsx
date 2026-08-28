@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import Link from 'next/link';
 import Analytics from '../components/Analytics';
 import './globals.css';
 
@@ -15,5 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en" className={`${sans.variable} ${mono.variable}`}><body><Link className="site-blog-link" href="/blog">Blog <span>↗</span></Link>{children}<Analytics/></body></html>;
+  return <html lang="en" className={`${sans.variable} ${mono.variable}`}><body>{children}<Analytics/></body></html>;
 }
