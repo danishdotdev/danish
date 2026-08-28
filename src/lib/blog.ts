@@ -1,4 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
+import { QueryCommand } from '@aws-sdk/lib-dynamodb';
+import { cmsConfig, dynamo, isAwsCmsConfigured } from './cms';
 
 export type BlogPost = {
   id: string;
@@ -32,28 +33,27 @@ const fallbackPost: BlogPost = {
   is_featured: true,
 };
 
-export const isSupabaseConfigured = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
-
-function publicClient() {
-  if (!isSupabaseConfigured) return null;
-  return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!);
-}
-
 export async function getPublishedPosts(): Promise<BlogPost[]> {
-  const supabase = publicClient();
-  if (!supabase) return [fallbackPost];
-  const { data, error } = await supabase.from('posts').select('*').eq('status', 'published').order('is_featured', { ascending: false }).order('published_at', { ascending: false });
-  if (error || !data?.length) return [fallbackPost];
-  const posts = data as BlogPost[];
-  return [...posts, fallbackPost].filter((post, index, all) => all.findIndex((candidate) => candidate.slug === post.slug) === index);
+  if (!isAwsCmsConfigured) return [fallbackPost];
+  try {
+    const { Items = [] } = await dynamo.send(new QueryCommand({ TableName: cmsConfig().table, IndexName: 'status-published_at-index', KeyConditionExpression: '#status = :published', ExpressionAttributeNames: { '#status': 'status' }, ExpressionAttributeValues: { ':published': 'published' }, ScanIndexForward: false }));
+    const posts = Items as BlogPost[];
+    posts.sort((a, b) => Number(b.is_featured) - Number(a.is_featured));
+    if (!posts.length) return [fallbackPost];
+    return [...posts, fallbackPost].filter((post, index, all) => all.findIndex((candidate) => candidate.slug === post.slug) === index);
+  } catch {
+    return [fallbackPost];
+  }
 }
 
 export async function getPublishedPost(slug: string): Promise<BlogPost | null> {
   if (slug === fallbackPost.slug) return fallbackPost;
-  const supabase = publicClient();
-  if (!supabase) return null;
-  const { data } = await supabase.from('posts').select('*').eq('status', 'published').eq('slug', slug).maybeSingle();
-  return data as BlogPost | null;
+  if (!isAwsCmsConfigured) return null;
+  try {
+    const { Items = [] } = await dynamo.send(new QueryCommand({ TableName: cmsConfig().table, IndexName: 'slug-index', KeyConditionExpression: 'slug = :slug', ExpressionAttributeValues: { ':slug': slug }, Limit: 1 }));
+    const post = Items[0] as (BlogPost & { status?: string }) | undefined;
+    return post?.status === 'published' ? post : null;
+  } catch { return null; }
 }
 
 export function blogCoverUrl(url: string) {
