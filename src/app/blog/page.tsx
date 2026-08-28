@@ -2,13 +2,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, Mail, PenLine } from 'lucide-react';
 import BlogDock from '../../components/BlogDock';
+import { blogCoverUrl, getPublishedPosts } from '../../lib/blog';
 
-const drafts = [
-  { label: 'Creative to product', title: 'From video editor to product builder: the path I didn’t plan', read: '5 min read' },
-  { label: 'Immigration technology', title: 'Designing calmer experiences for stressful workflows', read: '7 min read' },
-];
+export const dynamic = 'force-dynamic';
 
-export default function BlogIndex() {
+function formatDate(date: string | null) {
+  return date ? new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(date)) : 'New note';
+}
+
+export default async function BlogIndex() {
+  const posts = await getPublishedPosts();
+  const featured = posts.find((post) => post.is_featured) || posts[0];
+  const remaining = posts.filter((post) => post.id !== featured.id);
   return <main className="blog-shell">
     <header className="blog-nav">
       <Link href="/" className="blog-back">← Danish Khan</Link>
@@ -22,18 +27,18 @@ export default function BlogIndex() {
     </section>
 
     <section className="blog-featured" aria-labelledby="featured-title">
-      <div className="blog-featured-visual"><Image src="/portfolio/blog/siela-first-10-users-cover-v3.png" alt="A founder reviewing feedback at a desk" fill priority sizes="(max-width: 680px) 100vw, 640px"/><div className="featured-visual-caption"><span>01</span><i>Siela / field note</i></div></div>
-      <Link href="/blog/siela-first-10-users" className="blog-featured-copy">
+      <div className="blog-featured-visual"><Image src={blogCoverUrl(featured.cover_image_url)} alt="" fill priority sizes="(max-width: 680px) 100vw, 640px"/><div className="featured-visual-caption"><span>01</span><i>{featured.category} / field note</i></div></div>
+      <Link href={`/blog/${featured.slug}`} className="blog-featured-copy">
         <span className="blog-kicker">Featured note</span>
-        <h2 id="featured-title">How I got Siela&apos;s first 10 users in two weeks</h2>
-        <p>Direct conversations, a rough first version, and the small decisions that helped Siela find its first users.</p>
-        <div><span>Product & growth</span><span>4 min read</span><b>Read note <ArrowUpRight size={12}/></b></div>
+        <h2 id="featured-title">{featured.title}</h2>
+        <p>{featured.excerpt}</p>
+        <div><span>{featured.category}</span><span>{formatDate(featured.published_at)}</span><b>Read note <ArrowUpRight size={12}/></b></div>
       </Link>
     </section>
 
-    <section className="blog-section blog-post-list" aria-label="More articles">
-      <div className="blog-drafts">{drafts.map((draft) => <article key={draft.title}><div><span>{draft.label}</span><span>{draft.read}</span></div><h3>{draft.title}</h3><small>{draft.title === drafts[0].title ? 'Published' : 'Draft in progress'} <ArrowUpRight size={13}/></small></article>)}</div>
-    </section>
+    {remaining.length > 0 && <section className="blog-section blog-post-list" aria-label="More articles">
+      <div className="blog-drafts">{remaining.map((post) => <Link href={`/blog/${post.slug}`} className="blog-post-card" key={post.id}><Image src={blogCoverUrl(post.cover_image_url)} alt="" width={640} height={360}/><div><span>{post.category}</span><span>{formatDate(post.published_at)}</span></div><h3>{post.title}</h3><p>{post.excerpt}</p><small>Read note <ArrowUpRight size={13}/></small></Link>)}</div>
+    </section>}
 
     <footer className="blog-footer"><p>Want to talk product, growth, or creative work?</p><a href="mailto:dk557876@gmail.com">Email Danish <ArrowUpRight size={16}/></a></footer><BlogDock/>
   </main>;
