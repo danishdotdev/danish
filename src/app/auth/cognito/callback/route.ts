@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAwsCmsConfigured } from '../../../../lib/cms';
-import { exchangeCognitoCode, SESSION_COOKIE, STATE_COOKIE } from '../../../../lib/cms-auth';
+import { exchangeCognitoCode, SESSION_COOKIE, STATE_COOKIE, studioUserFromToken } from '../../../../lib/cms-auth';
+
+function deniedResponse(url: URL) {
+  const response = NextResponse.redirect(new URL('/studio?error=denied', url));
+  response.cookies.delete(SESSION_COOKIE);
+  response.cookies.delete(STATE_COOKIE);
+  return response;
+}
 
 export async function GET(request: NextRequest) {
   const url = new URL(request.url);
@@ -8,14 +15,17 @@ export async function GET(request: NextRequest) {
   const state = url.searchParams.get('state');
   const expected = request.cookies.get(STATE_COOKIE)?.value;
   const code = url.searchParams.get('code');
-  if (!code || !state || !expected || state !== expected) return NextResponse.redirect(new URL('/studio?error=denied', url));
+  if (!code || !state || !expected || state !== expected) return deniedResponse(url);
   try {
     const token = await exchangeCognitoCode(code);
+    // Verify both the Cognito signature and the explicit one-person allowlist
+    // before issuing a Studio cookie.
+    if (!await studioUserFromToken(token)) return deniedResponse(url);
     const response = NextResponse.redirect(new URL('/studio', url));
     response.cookies.set(SESSION_COOKIE, token, { httpOnly: true, secure: true, sameSite: 'lax', maxAge: 3600, path: '/' });
     response.cookies.delete(STATE_COOKIE);
     return response;
   } catch {
-    return NextResponse.redirect(new URL('/studio?error=denied', url));
+    return deniedResponse(url);
   }
 }

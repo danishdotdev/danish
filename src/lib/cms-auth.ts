@@ -14,6 +14,11 @@ export async function getStudioUser() {
   if (!isAwsCmsConfigured) return null;
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
+  return studioUserFromToken(token);
+}
+
+export async function studioUserFromToken(token: string) {
+  if (!isAwsCmsConfigured) return null;
   try {
     const payload = await verifier().verify(token);
     const email = typeof payload.email === 'string' ? payload.email.toLowerCase() : '';
