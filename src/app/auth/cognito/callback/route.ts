@@ -1,12 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { isAwsCmsConfigured } from '../../../../lib/cms';
 import { exchangeCognitoCode, SESSION_COOKIE, STATE_COOKIE } from '../../../../lib/cms-auth';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   if (!isAwsCmsConfigured) return NextResponse.redirect(new URL('/', url));
   const state = url.searchParams.get('state');
-  const expected = request.headers.get('cookie')?.match(/(?:^|; )danish_studio_state=([^;]+)/)?.[1];
+  const expected = request.cookies.get(STATE_COOKIE)?.value;
   const code = url.searchParams.get('code');
   if (!code || !state || !expected || state !== expected) return NextResponse.redirect(new URL('/studio?error=denied', url));
   try {
